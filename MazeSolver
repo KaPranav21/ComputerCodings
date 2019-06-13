@@ -1,0 +1,90 @@
+/**
+ * MazeSolver.java
+ * Sovles a maze.
+ * @author Mr. Kramer
+ * Requires the Stack class from Parenthesis Counter assignment
+ */
+import java.util.*;
+import java.io.*;
+public class MazeSolver {
+    public static void main(String [] args) throws Exception{
+        Scanner mazeFile = new Scanner(new BufferedReader(new FileReader("maze.txt")));
+        
+        /**Count the number of lines in the file (height of maze)
+           and the number of characters in each line (width)*/
+        int mazeHeight = 0;
+        int mazeWidth = 0;
+        while(mazeFile.hasNext()){
+            mazeHeight++;
+            String s = mazeFile.next();
+            mazeWidth = s.length();
+        }
+        /**Read the maze into a 2D Array*/
+        String[][] maze = new String[mazeHeight][mazeWidth];
+        mazeFile = new Scanner(new BufferedReader(new FileReader("maze.txt")));
+        int r = 0;
+        while(mazeFile.hasNext()){
+            String row = mazeFile.next();
+            for(int c = 0; c < mazeWidth; c++){
+                maze[r][c] = row.substring(c,c+1);
+            }
+            r++;
+        }
+        /**Try to print the maze (making sure it read in correctly)
+           Take this opportunity to find the starting position as well*/
+        int startRow = 0;
+        int startCol = 0;
+        for(r = 0; r < mazeHeight; r++){
+            for(int c = 0; c < mazeWidth; c++){
+                System.out.print(maze[r][c]);
+                if (maze[r][c].equals("@")) {startRow = r; startCol = c;}
+            }
+            System.out.println();
+        }
+        /**Set the current position to starting position and start the algorithm*/
+        Stack rows = new Stack(); // solution rows
+        Stack cols = new Stack(); // solution columns
+        int cr = startRow;
+        int cc = startCol;
+        maze[cr][cc] = "#"; // put a wall on the start to prevent going back to it
+        boolean done = false;
+        while(done == false) {
+            rows.push(cr);
+            cols.push(cc);
+            System.out.println(cr+","+cc);
+            if (maze[cr][cc].equals("$")){
+                done = true;
+            } else if (cr > 0 && !maze[cr-1][cc].equals("#")){
+                maze[cr][cc] = "#";
+                cr = cr - 1;
+            } else if (cr < mazeHeight-1 && !maze[cr+1][cc].equals("#")){
+                maze[cr][cc] = "#";
+                cr = cr + 1;
+            } else if (cc > 0 && !maze[cr][cc-1].equals("#")){
+                maze[cr][cc] = "#";
+                cc = cc - 1;
+            } else if (cc < mazeWidth-1 && !maze[cr][cc+1].equals("#")){
+                maze[cr][cc] = "#";
+                cc = cc + 1;
+            } else {
+                maze[cr][cc] = "#";
+                rows.pop();
+                cols.pop();
+                cr = rows.pop();
+                cc = cols.pop();
+            }
+        }
+        Stack finalRows = new Stack();
+        Stack finalCols = new Stack();
+        /**The stack have the reversed solution, so pop them onto new stacks
+           to reverse them*/
+        while(!rows.isEmpty()){
+            finalRows.push(rows.pop());
+            finalCols.push(cols.pop());
+        }
+        /**Print the solution*/
+        while(!finalRows.isEmpty()){
+            System.out.println("("+finalRows.pop()+","+finalCols.pop()+")");
+        }
+    }
+}

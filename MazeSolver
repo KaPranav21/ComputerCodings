@@ -1,9 +1,3 @@
-/**
- * MazeSolver.java
- * Sovles a maze.
- * @author Mr. Kramer
- * Requires the Stack class from Parenthesis Counter assignment
- */
 import java.util.*;
 import java.io.*;
 public class MazeSolver {

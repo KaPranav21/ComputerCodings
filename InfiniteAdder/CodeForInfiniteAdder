@@ -1,0 +1,127 @@
+import java.util.Scanner;
+import java.io.*;
+public class InfiniteAdderLinkedList{	
+        private static Digit head;
+        
+	public Digit createListFromFile(Scanner tempFile) {
+	    Digit node = new Digit(tempFile.nextInt()); 
+	    addNode(node);
+	    while(tempFile.hasNext()){
+	        addNode(new Digit(tempFile.nextInt()));
+	       }
+	    return node;
+        }			              
+	public void addNode(Digit Digit) {
+            if (head == null) {
+			head = Digit;
+		} else {
+              Digit temp = head;
+	      while (temp.next != null){
+		temp = temp.next;
+		temp.next = Digit;
+	      }
+            }
+        }  
+	public void printList(Digit printDigit) {
+		Digit temp = printDigit;
+		while (temp != null) {
+			System.out.format("%d ", temp.data);
+			temp = temp.next;
+		}
+		System.out.println();
+	} 
+	public static Digit reverse(Digit Digit) {
+		if (Digit == null || Digit.next == null) {
+			return Digit;
+		}
+		Digit remaining = reverse(Digit.next);
+		Digit.next.next = Digit;
+		Digit.next = null;
+		return remaining;
+	}
+	public Digit addNums(Digit nodeOne, Digit nodeTwo) {
+	        int carry =0; 
+		int addition = 0; 
+		int firstNum=0;
+		int remainder=0;
+		Digit newHead = null; 
+	        Digit tempNode=null;
+		
+		while(nodeOne!=null || nodeTwo!=null)
+		{
+                        firstNum++;	
+
+			//System.out.println();
+			addition = carry;
+			if(nodeOne!=null)
+			{
+				addition = addition+nodeOne.data;
+				//System.out.format("firstNum:%d node1:%d , add:%d ", firstNum,nodeOne.data,addition);
+				 //System.out.println();
+				nodeOne=nodeOne.next;
+				
+			}
+			if(nodeTwo!=null)
+			{
+				addition=addition+nodeTwo.data;
+				//System.out.format("firstNum:%d node2:%d , add:%d ", firstNum,nodeTwo.data,addition);
+				// System.out.println();
+				nodeTwo=nodeTwo.next;
+                        }
+		        carry = addition/10;
+			   if (carry > 0) {
+			  remainder = addition % 10; 
+		           if (remainder >= 0) {
+			     addition = remainder;
+			     remainder = 0;
+			  }
+                        }			
+			if(firstNum==1)
+			{ 
+			  tempNode = new Digit(addition);
+			  newHead=tempNode;
+			}
+			else
+			{
+				Digit tempadditionNode=new Digit(addition);
+		 		tempNode.next=tempadditionNode;
+				tempNode=tempNode.next;
+			 }		
+			 
+		  }
+		  if(carry!=0)
+		        {
+			 Digit tempDigit=new Digit(carry);
+			 tempNode.next=tempDigit;
+		        }
+		        else {
+		            carry = 0;
+		          }
+		  return newHead;
+	}
+ 	public static void main(String[] args) throws Exception {
+		Scanner file1 = new Scanner(new BufferedReader(new FileReader("Nums1.txt")));
+                Scanner file2 = new Scanner(new BufferedReader(new FileReader("Nums2.txt")));
+                
+ 	        InfiniteAdderLinkedList list = new InfiniteAdderLinkedList();
+		Digit head1=list.createListFromFile(file1);
+		System.out.print("Number 1:    ");
+		list.printList(head1);
+		
+		head=null;
+		
+		Digit head2=list.createListFromFile(file2);
+		System.out.print("Number 2:    ");
+		list.printList(head2);
+		
+		head1=reverse(head1);
+ 
+		head2=reverse(head2);
+		
+		Digit result= list.addNums(head1,head2);
+		
+		result = reverse(result);
+		System.out.print("addition:  ");
+		list.printList(result);
+	}
+}

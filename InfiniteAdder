@@ -1,0 +1,170 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.*;
+
+public class BST <T>
+{
+     BSTNode root;
+    /* This method inserts and balances all of the node values, either to the left or right of the root node value 
+     * by comparing the value of the node to the root node
+     */
+    public void insert(T insertMe) {
+        
+        // Inserts a root node
+        BSTNode insertNode = new BSTNode(insertMe);
+        if (root == null) {
+            root = insertNode;
+            return;
+            
+        }
+
+        BSTNode curr = root;
+        boolean doStuff = true;
+
+        while(doStuff) {
+            //moves all nodes greater than the root to the right of the root node
+            if (insertNode.compareTo(curr) > 0){
+               if (curr.getRight() == null ) {
+                   curr.setRight(insertNode);
+                   doStuff = false;
+                }
+
+               else {
+                    curr = curr.getRight();                 
+                }
+
+            }
+            //moves all nodes less than or equal to the root left of the root node
+            else {
+                if (curr.getLeft() == null) {
+                    curr.setLeft(insertNode);
+                    doStuff = false;
+                    }
+
+                else{
+                    curr = curr.getLeft();  
+                    }
+                }
+            } 
+
+    }
+        
+    //This method prints the nodes into the tree level using linked lists 
+    //The linked lists stores the data at the breadth level and displays every level on a new line
+    public  void printTree(BSTNode root) {
+        System.out.println("\nPrint Tree by level:\n");
+        LinkedList<BSTNode> q = new  LinkedList<BSTNode> ();
+
+        q.add(root.left);
+        q.add(root.right);
+        int currDrawLevel = root.level;
+        System.out.print(root.value + "\t");
+
+        /* All of the nodes on the left or right of the root at the same level are displayed on the same line.
+        If the node level changes, insert a new line.
+        */
+        while (!q.isEmpty())
+        {
+            BSTNode node = q.pollFirst();
+            if (node == null)
+                 continue;
+
+            if (node.level != currDrawLevel)
+            {
+                currDrawLevel = node.level;
+                System.out.println();
+            }
+
+            System.out.print(node.value + "\t");
+            q.add(node.left);
+            q.add(node.right);
+        } 
+
+    }
+
+    // This method sets the level of all of the nodes in a recursive manner
+    
+    public void setLevels (BSTNode r, int level)
+    {
+
+        if (r == null)
+            return;
+
+        r.level = level;
+        setLevels (r.left, level+1);
+        setLevels (r.right, level+1);
+
+    }
+
+ 
+    /* This is a node class that contains the elements to save the left and right values and also the levels of those values
+     * This class also has methods to get the right and left nodes for a given node and a metod to compare nodes */
+    public class BSTNode implements Comparable
+    {
+
+        T value;
+        BSTNode left;
+        BSTNode right;
+        int level;
+
+        public BSTNode(T val) {
+            value = val;
+        }
+
+        public T get() {
+            return value;
+        }
+
+        public void set(T val) {
+            value = val;
+        }
+
+        public BSTNode getLeft() {
+            return left;
+        }
+
+        public void setLeft(BSTNode n) {
+            left = n;
+        }
+
+        public BSTNode getRight() {
+            return right;
+        }
+
+        public void setRight(BSTNode n) {
+            right = n;
+        }
+
+        public int compareTo(Object o) {
+            BSTNode n = (BSTNode) o;
+            return ((Comparable)value).compareTo((Comparable) n.get());
+        }
+
+    }
+    
+    /* This method is the main method to run the BST class with a set of integers and set the levels of the integers
+    and display them in breadth level format */ 
+   
+    public static void main(String [] args) {
+        System.out.println();
+        BST<Integer> bstNode = new BST<Integer>();
+        Integer [] a = new Integer[] {300,2323,433,333,556,789,3456};
+        List<Integer> scores = Arrays.asList(a); 
+
+        System.out.println("Numbers for BST:");
+
+        for (Integer i : scores) {
+            System.out.printf("%d,",i);
+        }
+        System.out.println();
+
+        for (Integer i : scores) {
+            bstNode.insert(i);
+        }
+
+        bstNode.setLevels(bstNode.root,0);       
+        bstNode.printTree(bstNode.root);
+    }
+
+}
+ 

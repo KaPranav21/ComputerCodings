@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+public class Solution {
+  public static void main(String[] args) {
+    Scanner scan = new Scanner(System.in);
+    
+        String g = scan.nextLine();
+        int i = Integer.parseInt(g);
+        String h = scan.nextLine();
+        double d = Double.parseDouble(h);
+        String s = scan.nextLine();
+
+        // Write your code here.
+
+        System.out.println("String: " + s);
+        System.out.println("Double: " + d);
+        System.out.println("Int: " + i);
+
+    }
+}
+

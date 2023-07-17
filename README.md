@@ -1,2 +1,2 @@
 # High School Projects
-For comp sci and other things
+Computer Science projects featuring Data Structures
